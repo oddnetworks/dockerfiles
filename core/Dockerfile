@@ -1,5 +1,5 @@
 FROM ubuntu:trusty
-MAINTAINER Odd Networks
+MAINTAINER Odd Networks <info@oddnetworks.com>
 
 ## Create a 'docker' user
 RUN  addgroup --gid 9999 docker \
