@@ -1,4 +1,5 @@
 FROM oddnetworks/core
+MAINTAINER Odd Networks <info@oddnetworks.com>
 
 ENV JAVA_VERSION=7
 

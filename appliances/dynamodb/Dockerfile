@@ -1,4 +1,5 @@
 FROM oddnetworks/java:7
+MAINTAINER Odd Networks <info@oddnetworks.com>
 
 WORKDIR /home/docker
 ENV DATADIR /var/lib/dynamodb

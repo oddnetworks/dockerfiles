@@ -1,5 +1,5 @@
 FROM instructure/core:latest
-MAINTAINER Instructure
+MAINTAINER Odd Networks <info@oddnetworks.com>
 
 USER root
 
