@@ -1,12 +1,17 @@
-FROM java:7-jre-alpine
+FROM oddnetworks/java:7
 
-RUN mkdir /var/dynamodb_wd
-RUN mkdir /var/dynamodb_local
-WORKDIR /var/dynamodb_wd
+WORKDIR /home/docker
+ENV DATADIR /var/lib/dynamodb
 
-RUN wget -q http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz && \
-    tar zxvf dynamodb_local_latest.tar.gz && rm dynamodb_local_latest.tar.gz
+USER root
+RUN mkdir $DATADIR && chown docker:docker $DATADIR
+USER docker
+
+RUN /usr/bin/curl -L http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest | /bin/tar xz
 
 EXPOSE 8000
+VOLUME $DATADIR
 
-ENTRYPOINT ["java", "-Djava.library.path=.", "-jar", "DynamoDBLocal.jar",  "--sharedDb", "-port", "8000"]
+COPY entrypoint.sh /home/docker/entrypoint.sh
+
+ENTRYPOINT ["/home/docker/entrypoint.sh", "-dbPath /var/lib/dynamodb"]
