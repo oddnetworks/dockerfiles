@@ -14,5 +14,8 @@ EXPOSE 8000
 VOLUME $DATADIR
 
 COPY entrypoint.sh /home/docker/entrypoint.sh
+USER root
+RUN chmod +x /home/docker/entrypoint.sh
+USER docker
 
 ENTRYPOINT ["/home/docker/entrypoint.sh", "-dbPath /var/lib/dynamodb"]
