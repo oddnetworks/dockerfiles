@@ -6,6 +6,6 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     TERM=xterm
 
-RUN echo "http://dl-4.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories; \
+RUN echo "http://dl-4.alpinelinux.org/alpine/v3.4/community" >> /etc/apk/repositories; \
     apk update; apk upgrade; \
     apk add bash bind-tools curl jq
