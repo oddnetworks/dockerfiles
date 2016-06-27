@@ -23,4 +23,4 @@ WORKDIR /dynamodb/
 EXPOSE 8000
 VOLUME $DATADIR
 
-ENTRYPOINT ["/dynamodb/dynamo.sh", "-dbPath /var/lib/dynamodb"]
+ENTRYPOINT ["/dynamodb/dynamo.sh", "-inMemory"]

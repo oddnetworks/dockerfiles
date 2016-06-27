@@ -1,2 +1,2 @@
 #! /bin/sh
-exec java -Djava.library.path=/dynamo/DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb $@
+exec java -Djava.library.path=/dynamo/DynamoDBLocal_lib -jar DynamoDBLocal.jar $@
