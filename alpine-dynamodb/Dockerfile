@@ -1,23 +1,19 @@
-FROM oddnetworks/alpine-base-consul:latest
+FROM oddnetworks/alpine-base:latest
 MAINTAINER Odd Networks <info@oddnetworks.com>
 
-RUN mkdir -p /var/lib/dynamodb && \
-    addgroup dynamodb && \
-    adduser -S -D -g "" -G dynamodb -s /sbin/nologin -h /var/lib/dynamodb dynamodb && \
-    chown -R dynamodb:dynamodb /var/lib/dynamodb
+ENV DATADIR /var/lib/dynamodb \
+    DYNAMODB_VERSION latest
 
-RUN apk add --update openjdk8-jre tar && \
-    mkdir -p /usr/local/dynamodb && \
-    cd /usr/local/dynamodb && \
-    curl -sSL http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz | tar -xzo && \
-    rm /usr/local/dynamodb/DynamoDBLocal_lib/*sqlite4java* && \
-    apk del tar && \
-    rm -rf /var/cache/apk/*
+RUN apk update && apk add openjdk7 \
+  && wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_${DYNAMODB_VERSION}.tar.gz -O /tmp/dynamo.tar.gz \
+  && mkdir -p /opt/dynamodb \
+  && tar -xzvf /tmp/dynamo.tar.gz -C /opt/dynamodb \
+  && rm /tmp/dynamo.tar.gz \
+  && rm -r /var/cache/apk/*
 
-COPY root /
+WORKDIR /opt/dynamodb
 
-ENTRYPOINT ["/init"]
-CMD []
-
+VOLUME $DATADIR
 EXPOSE 8000
-VOLUME ["/var/lib/dynamodb"]
+
+ENTRYPOINT ["/usr/bin/java", "-Djava.library.path=/opt/dynamodb/DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", $DATADIR]
