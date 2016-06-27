@@ -11,7 +11,6 @@ COPY no-pic.patch /
 
 RUN set -ex \
 	&& apk add --no-cache --virtual .build-deps \
-		ca-certificates \
 		gcc \
 		musl-dev \
 		openssl \
@@ -30,8 +29,8 @@ RUN set -ex \
 	&& rm -rf /*.patch \
 	&& apk del .build-deps
 
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+ENV GOPATH /go \
+		PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 WORKDIR $GOPATH
