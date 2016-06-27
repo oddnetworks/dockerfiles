@@ -5,13 +5,11 @@ ENV DATADIR /var/lib/dynamodb \
     DYNAMODB_VERSION latest
 
 RUN apk update; \
-  apk add openjdk7 wget;
-  wget http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_${DYNAMODB_VERSION} -O /tmp/dynamo.tar.gz \
+  apk add openjdk7;
+  curl -o /tmp/dynamo.tar.gz -L http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_${DYNAMODB_VERSION}
   && mkdir -p /opt/dynamodb \
   && tar -xzvf /tmp/dynamo.tar.gz -C /opt/dynamodb \
-  && rm /tmp/dynamo.tar.gz \
-  && apk rem wget \
-  && rm -r /var/cache/apk/*
+  && rm /tmp/dynamo.tar.gz
 
 WORKDIR /opt/dynamodb
 
