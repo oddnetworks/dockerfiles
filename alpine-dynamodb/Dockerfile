@@ -10,6 +10,7 @@ RUN apk update; \
   && mkdir -p /opt/dynamodb \
   && tar -xzvf /tmp/dynamo.tar.gz -C /opt/dynamodb \
   && rm /tmp/dynamo.tar.gz \
+  && apk rem wget \
   && rm -r /var/cache/apk/*
 
 WORKDIR /opt/dynamodb
