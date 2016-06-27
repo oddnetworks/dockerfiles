@@ -1,7 +1,8 @@
 #!/bin/sh
 
-apk add --update \
-  curl \
+set -ex
+
+apk add --no-cache --update --virtual .build-deps \
   make \
   gcc \
   g++ \
@@ -11,10 +12,8 @@ apk add --update \
   libgcc \
   libstdc++
 
-set -x
-
 # Make NodeJS
-curl -sSL https://nodejs.org/dist/${VERSION}/node-${NODE_VERSION}.tar.gz | tar -xz
+curl -sSL -o - https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}.tar.gz | tar -xz
 cd node-${NODE_VERSION}
 ./configure --prefix=/usr ${CONFIG_FLAGS}
 make -j$(grep -c ^processor /proc/cpuinfo 2>/dev/null || 1)
@@ -28,19 +27,11 @@ if [ -x /usr/bin/npm ]; then
 fi
 
 # Cleanup
-apk del \
-  curl \
-  make \
-  gcc \
-  g++ \
-  python \
-  linux-headers \
-  paxctl \
-  ${DEL_PKGS}
+apk del .build-deps
 
 rm -rf \
   /etc/ssl \
-  /root/node-${VERSION} \
+  /root/node-${NODE_VERSION} \
   ${RM_DIRS} \
   /usr/share/man \
   /tmp/* \
