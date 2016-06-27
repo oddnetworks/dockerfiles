@@ -1,19 +1,22 @@
 FROM oddnetworks/alpine-base:latest
 MAINTAINER Odd Networks <info@oddnetworks.com>
 
-ENV DATADIR /var/lib/dynamodb \
-    DYNAMODB_VERSION latest
+RUN apk update \
+    && apk --update add openjdk8-jre-base \
+    && adduser -S dynamo \
+    && mkdir /dynamodb \
+    && curl -s -L -o - http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_latest.tar.gz | tar -xzf - -C /dynamodb \
+    && chown -R dynamo /dynamodb/* \
+    && rm -rf /var/cache/apk/*
 
-RUN apk update; \
-  apk add openjdk7;
-  curl -o /tmp/dynamo.tar.gz -L http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dynamodb_local_${DYNAMODB_VERSION}
-  && mkdir -p /opt/dynamodb \
-  && tar -xzvf /tmp/dynamo.tar.gz -C /opt/dynamodb \
-  && rm /tmp/dynamo.tar.gz
+ADD scripts/dynamo.sh /dynamodb/dynamo.sh
 
-WORKDIR /opt/dynamodb
+RUN chmod +x /dynamodb/dynamo.sh 
 
-VOLUME $DATADIR
+USER dynamo
+
+WORKDIR /dynamodb/
+
 EXPOSE 8000
 
-ENTRYPOINT ["/usr/bin/java", "-Djava.library.path=/opt/dynamodb/DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", $DATADIR]
+ENTRYPOINT ["/dynamodb/dynamo.sh"]
