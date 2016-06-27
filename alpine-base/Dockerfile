@@ -8,4 +8,4 @@ ENV LANG=en_US.UTF-8 \
 
 RUN echo "http://dl-4.alpinelinux.org/alpine/v3.4/community" >> /etc/apk/repositories; \
     apk update; apk upgrade; \
-    apk add bash bind-tools curl jq
+    apk add bash bind-tools curl jq wget
