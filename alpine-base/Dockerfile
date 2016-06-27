@@ -1,4 +1,4 @@
-FROM alpine:latest-stable
+FROM alpine:3.4
 MAINTAINER Odd Networks <info@oddnetworks.com>
 
 ENV LANG=en_US.UTF-8 \
