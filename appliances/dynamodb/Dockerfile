@@ -46,4 +46,6 @@ RUN /usr/bin/curl -L http://dynamodb-local.s3-website-us-west-2.amazonaws.com/dy
 EXPOSE 8000
 VOLUME $DATADIR
 
-ENTRYPOINT ["/home/docker/entrypoint.sh", "-dbPath /var/lib/dynamodb"]
+ENTRYPOINT ["/home/docker/entrypoint.sh"]
+
+CMD ["-inMemory"]
